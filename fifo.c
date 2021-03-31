@@ -14,6 +14,7 @@ void fifo_fill(FIFO *fifo) {
 }
 
 void main() {
+    //debugging = 1; // switch on debug mode
     FIFO fifo;
     int i;
     int error;
@@ -46,7 +47,7 @@ void main() {
     printf("---------------- Third test ----------------\n");
     fifo_reset(&fifo);
     fifo_print(&fifo);
-    for (i = 0; i < FIFO_SIZE; i++) {
+    for (i = 0; i < FIFO_SIZE + 5; i++) {
         TYPE element = i;
         error = fifo_push(&fifo, element);
         if (!error)

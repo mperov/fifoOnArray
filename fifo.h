@@ -3,7 +3,15 @@
 
 #include <stdio.h>
 
-//#define DEBUG
+unsigned int debugging = 0;
+
+#define DEBUG
+#if defined(DEBUG)
+#   define debug_printf(...) (debugging) ? printf(__VA_ARGS__) : printf("")
+#else
+#   define debug_printf(...)
+#endif
+
 #define FIFO_SIZE 10
 #define TYPE int
 
@@ -24,9 +32,7 @@ int fifo_push(FIFO *fifo, TYPE element) {
         fifo->count++;
         if (fifo->end == FIFO_SIZE)
             fifo->end = 0;
-#ifdef DEBUG
-        printf("push: end is %i\n", fifo->end);
-#endif // DEBUG
+        debug_printf("push: end is %i\n", fifo->end);
         return 0;
     } else
         return -1;
@@ -38,9 +44,7 @@ int fifo_pop(FIFO *fifo, TYPE *element) {
         fifo->count--;
         if (fifo->start == FIFO_SIZE)
             fifo->start = 0;
-#ifdef DEBUG
-        printf("pop: start is %i\n", fifo->start);
-#endif // DEBUG
+        debug_printf("pop: start is %i\n", fifo->start);
         if (fifo->count == 0)
             fifo->start = fifo->end = 0;
         return 0;
