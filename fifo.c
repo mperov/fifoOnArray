@@ -43,5 +43,23 @@ void main() {
         fifo_print(&fifo);
     }
     printf("================ Second test ================\n");
+    printf("---------------- Third test ----------------\n");
+    fifo_reset(&fifo);
+    fifo_print(&fifo);
+    for (i = 0; i < FIFO_SIZE; i++) {
+        TYPE element = i;
+        error = fifo_push(&fifo, element);
+        if (!error)
+            printf("element to FIFO: %i\n", element);
+        else
+            printf("pop error, line is %i\n", __LINE__);
+        error = fifo_pop(&fifo, &element);
+        if (!error)
+            printf("element from FIFO: %i\n", element);
+        else
+            printf("pop error, line is %i\n", __LINE__);
+        fifo_print(&fifo);
+    }
+    printf("================ Third test ================\n");
     return;
 }
