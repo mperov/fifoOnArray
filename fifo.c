@@ -20,8 +20,20 @@ void fifo_print(FIFO *fifo) {
         printf("FIFO is empty!\n");
 }
 
-void fifo_push(FIFO *fifo, TYPE element) {
-    fifo->array[fifo->end++] = element;
+int fifo_push(FIFO *fifo, TYPE element) {
+    if (fifo->end < FIFO_SIZE) {
+        fifo->array[fifo->end++] = element;
+        return 0;
+    } else
+        return -1;
+}
+
+int fifo_pop(FIFO *fifo, TYPE *element) {
+    if (fifo->start != fifo->end) {
+        *element = fifo->array[fifo->start++];
+        return 0;
+    } else
+        return -1;
 }
 
 void fifo_init(FIFO *fifo) {
@@ -34,7 +46,16 @@ void fifo_init(FIFO *fifo) {
 
 void main() {
     FIFO fifo;
+    printf("---------------- First test ----------------\n");
     fifo_init(&fifo);
     fifo_print(&fifo);
+    int i;
+    for (i = 0; i < FIFO_SIZE; i++) {
+        TYPE element;
+        fifo_pop(&fifo, &element);
+        printf("element from FIFO: %i\n", element);
+        fifo_print(&fifo);
+    }
+    printf("================ First test ================\n");
     return;
 }
