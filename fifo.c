@@ -16,6 +16,7 @@ void fifo_print(FIFO *fifo) {
 void fifo_init(FIFO *fifo) {
     int i;
     int error;
+    fifo->start = fifo->end = fifo->count = 0;
     for(i = 0; i < FIFO_SIZE; i++) {
         error = fifo_push(fifo, i);
         if (error)
@@ -25,7 +26,6 @@ void fifo_init(FIFO *fifo) {
 
 void main() {
     FIFO fifo;
-    fifo.start = fifo.end = 0;
     int i;
     int error;
     printf("---------------- First test ----------------\n");
