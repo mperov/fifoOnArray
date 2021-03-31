@@ -18,9 +18,13 @@ void fifo_fill(FIFO *fifo) {
 void main() {
     //debugging = 1; // switch on debug mode
     FIFO fifo;
-    fifo_init(&fifo, FIFO_SIZE);
-    int i;
     int error;
+    error = fifo_init(&fifo, FIFO_SIZE);
+    if (error) {
+        printf("Error in initializing of FIFO!\n");
+        exit(-1);
+    }
+    int i;
     printf("---------------- First test ----------------\n");
     fifo_fill(&fifo);
     fifo_print(&fifo);
@@ -65,5 +69,6 @@ void main() {
         fifo_print(&fifo);
     }
     printf("================ Third test ================\n");
+    fifo_finalize(&fifo);
     return;
 }

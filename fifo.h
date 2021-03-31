@@ -24,16 +24,32 @@ typedef struct {
 } FIFO;
 
 void fifo_reset(FIFO *fifo) {
-    fifo->start = fifo->end = fifo->count = 0;
+    if (fifo)
+        fifo->start = fifo->end = fifo->count = 0;
 }
 
 int fifo_init(FIFO *fifo, unsigned int fifo_size) {
-    fifo->fifo_size = fifo_size;
-    fifo_reset(fifo);
-    fifo->array = calloc(fifo_size, sizeof(TYPE));
+    if (fifo) {
+        fifo->fifo_size = fifo_size;
+        fifo_reset(fifo);
+        fifo->array = calloc(fifo_size, sizeof(TYPE));
+        if (!fifo->array)
+            return -1;
+        return 0;
+    } else
+        return -1;
+}
+
+void fifo_finalize(FIFO *fifo) {
+    if (!fifo)
+        return;
+    if (fifo->array)
+        free(fifo->array);
 }
 
 int fifo_push(FIFO *fifo, TYPE element) {
+    if (!fifo)
+        return -1;
     if (fifo->count < fifo->fifo_size) {
         fifo->array[fifo->end++] = element;
         fifo->count++;
@@ -46,6 +62,8 @@ int fifo_push(FIFO *fifo, TYPE element) {
 }
 
 int fifo_pop(FIFO *fifo, TYPE *element) {
+    if (!fifo || !element)
+        return -1;
     if (fifo->count != 0) {
         *element = fifo->array[fifo->start++];
         fifo->count--;
@@ -60,6 +78,8 @@ int fifo_pop(FIFO *fifo, TYPE *element) {
 }
 
 void fifo_print(FIFO *fifo) {
+    if (!fifo)
+        return;
     if (fifo->count != 0) {
         printf("all elements of FIFO: ");
         int i;
