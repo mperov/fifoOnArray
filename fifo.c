@@ -3,11 +3,16 @@
 #include "fifo.h"
 
 void fifo_print(FIFO *fifo) {
-    if (fifo->start != fifo->end) {
+    if (fifo->count != 0) {
         printf("all elements of FIFO: ");
         int i;
-        for (i = fifo->start; i < fifo->end; i++)
-            printf("%i ", fifo->array[i]);
+        int j = fifo->start;
+        for (i = 0; i < fifo->count; i++) {
+            printf("%i ", fifo->array[j]);
+            j++;
+            if (j == FIFO_SIZE)
+                j = 0;
+        }
         printf("\n");
     } else
         printf("FIFO is empty!\n");
