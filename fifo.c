@@ -2,11 +2,13 @@
 
 #include "fifo.h"
 
+#define FIFO_SIZE 10
+
 void fifo_fill(FIFO *fifo) {
     int i;
     int error;
     fifo_reset(fifo);
-    for(i = 0; i < FIFO_SIZE; i++) {
+    for(i = 0; i < fifo->fifo_size; i++) {
         error = fifo_push(fifo, i);
         if (error)
             printf("push error, line is %i\n", __LINE__);
@@ -16,12 +18,13 @@ void fifo_fill(FIFO *fifo) {
 void main() {
     //debugging = 1; // switch on debug mode
     FIFO fifo;
+    fifo_init(&fifo, FIFO_SIZE);
     int i;
     int error;
     printf("---------------- First test ----------------\n");
     fifo_fill(&fifo);
     fifo_print(&fifo);
-    for (i = 0; i < FIFO_SIZE; i++) {
+    for (i = 0; i < fifo.fifo_size; i++) {
         TYPE element;
         error = fifo_pop(&fifo, &element);
         if (!error)
@@ -34,7 +37,7 @@ void main() {
     printf("---------------- Second test ----------------\n");
     fifo_fill(&fifo);
     fifo_print(&fifo);
-    for (i = 0; i < FIFO_SIZE + 5; i++) {
+    for (i = 0; i < fifo.fifo_size + 5; i++) {
         TYPE element;
         error = fifo_pop(&fifo, &element);
         if (!error)
@@ -47,7 +50,7 @@ void main() {
     printf("---------------- Third test ----------------\n");
     fifo_reset(&fifo);
     fifo_print(&fifo);
-    for (i = 0; i < FIFO_SIZE + 5; i++) {
+    for (i = 0; i < fifo.fifo_size + 5; i++) {
         TYPE element = i;
         error = fifo_push(&fifo, element);
         if (!error)
