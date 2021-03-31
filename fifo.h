@@ -1,13 +1,11 @@
 #ifndef FIFO_H_
 #define FIFO_H
 
+#include <stdio.h>
+
 //#define DEBUG
 #define FIFO_SIZE 10
 #define TYPE int
-
-#ifdef DEBUG
-#   include <stdio.h>
-#endif // DEBUG
 
 typedef struct {
     TYPE array[FIFO_SIZE];
@@ -15,6 +13,10 @@ typedef struct {
     unsigned int end;
     unsigned int count;
 } FIFO;
+
+void fifo_reset(FIFO *fifo) {
+    fifo->start = fifo->end = fifo->count = 0;
+}
 
 int fifo_push(FIFO *fifo, TYPE element) {
     if (fifo->count < FIFO_SIZE) {
@@ -44,6 +46,22 @@ int fifo_pop(FIFO *fifo, TYPE *element) {
         return 0;
     } else
         return -1;
+}
+
+void fifo_print(FIFO *fifo) {
+    if (fifo->count != 0) {
+        printf("all elements of FIFO: ");
+        int i;
+        int j = fifo->start;
+        for (i = 0; i < fifo->count; i++) {
+            printf("%i ", fifo->array[j]);
+            j++;
+            if (j == FIFO_SIZE)
+                j = 0;
+        }
+        printf("\n");
+    } else
+        printf("FIFO is empty!\n");
 }
 
 #endif // FIFO_H_
