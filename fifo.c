@@ -38,44 +38,73 @@ void fifo_fill(FIFO *fifo) {
         printf("element to FIFO: %i\n", a);\
     else\
         printf("pop error, line is %i\n", __LINE__);
-        
 
-void main() {
-    //debugging = 1; // switch on debug mode
-    FIFO fifo;
-    int error;
-    error = fifo_init(&fifo, FIFO_SIZE);
-    if (error) {
-        printf("Error in initializing of FIFO!\n");
-        exit(-1);
-    }
-    int i;
-    printf("---------------- First test ----------------\n");
-    FILL
-    PRINT
-    for (i = 0; i < fifo.fifo_size; i++) {
-        POP
-        PRINT
-    }
-    printf("================ First test ================\n");
-    printf("---------------- Second test ----------------\n");
-    FILL
-    PRINT
-    for (i = 0; i < fifo.fifo_size + 5; i++) {
-        POP
-        PRINT
-    }
-    printf("================ Second test ================\n");
-    printf("---------------- Third test ----------------\n");
+
+#define RESET\
     fifo_reset(&fifo);
-    PRINT
-    for (i = 0; i < fifo.fifo_size + 5; i++) {
-        TYPE element = i;
-        PUSH(element)
-        POP
-        PRINT
+        
+#define INIT\
+    FIFO fifo;\
+    int error;\
+    error = fifo_init(&fifo, FIFO_SIZE);\
+    if (error) {\
+        printf("Error in initializing of FIFO!\n");\
+        exit(-1);\
     }
-    printf("================ Third test ================\n");
+    
+#define FINALIZE\
     fifo_finalize(&fifo);
+    
+#define TEST(name, code)\
+    printf("==================TEST %s==================\n", #name);\
+    code
+    
+void main() {
+    TEST(TESTING_TEST, {printf("Hello, world!\n");})
+    TEST(JUST_POP, {
+        INIT
+        FILL
+        PRINT
+        int i;
+        for (i = 0; i < 11; ++i) {
+            POP
+            PRINT
+        }
+        FINALIZE
+    })
+    TEST(JUST_PUSH, {
+        INIT
+        PRINT
+        int i;
+        for (i = 0; i < 11; ++i) {
+            PUSH(i * i)
+            PRINT
+        }
+        FINALIZE
+    })
+    TEST(PING_PONG, {
+        INIT
+        int i;
+        for (i = 0; i < 15; ++i) {
+            PUSH (i * i * i)
+            PRINT
+            POP
+            PRINT
+        }
+        FINALIZE
+    })
+    TEST(FILL_CLEAR, {
+        INIT
+        int i;
+        for (i = 0; i < 10; ++i) {
+            PUSH(i)
+            PRINT
+        }
+        for (i = 0; i < 10; ++i) {
+            POP
+            PRINT
+        }
+        FINALIZE
+    })
     return;
 }
