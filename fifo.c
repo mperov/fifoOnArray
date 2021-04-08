@@ -15,6 +15,31 @@ void fifo_fill(FIFO *fifo) {
    }
 }
 
+#define FIFO_INIT\
+        fifo_fill(&fifo);
+    
+#define POP\
+    TYPE __element;\
+    error = fifo_pop(&fifo, &__element);\
+    if (!error)\
+        printf("element from FIFO: %i\n", __element);\
+    else\
+        printf("pop error, line is %i\n", __LINE__);
+
+#define PRINT\
+    fifo_print(&fifo);
+    
+#define FILL\
+    fifo_fill(&fifo);
+    
+#define PUSH(a)\
+    error = fifo_push(&fifo, a);\
+    if (!error)\
+        printf("element to FIFO: %i\n", a);\
+    else\
+        printf("pop error, line is %i\n", __LINE__);
+        
+
 void main() {
     //debugging = 1; // switch on debug mode
     FIFO fifo;
@@ -26,47 +51,29 @@ void main() {
     }
     int i;
     printf("---------------- First test ----------------\n");
-    fifo_fill(&fifo);
-    fifo_print(&fifo);
+    FILL
+    PRINT
     for (i = 0; i < fifo.fifo_size; i++) {
-        TYPE element;
-        error = fifo_pop(&fifo, &element);
-        if (!error)
-            printf("element from FIFO: %i\n", element);
-        else
-            printf("pop error, line is %i\n", __LINE__);
-        fifo_print(&fifo);
+        POP
+        PRINT
     }
     printf("================ First test ================\n");
     printf("---------------- Second test ----------------\n");
-    fifo_fill(&fifo);
-    fifo_print(&fifo);
+    FILL
+    PRINT
     for (i = 0; i < fifo.fifo_size + 5; i++) {
-        TYPE element;
-        error = fifo_pop(&fifo, &element);
-        if (!error)
-            printf("element from FIFO: %i\n", element);
-        else
-            printf("pop error, line is %i\n", __LINE__);
-        fifo_print(&fifo);
+        POP
+        PRINT
     }
     printf("================ Second test ================\n");
     printf("---------------- Third test ----------------\n");
     fifo_reset(&fifo);
-    fifo_print(&fifo);
+    PRINT
     for (i = 0; i < fifo.fifo_size + 5; i++) {
         TYPE element = i;
-        error = fifo_push(&fifo, element);
-        if (!error)
-            printf("element to FIFO: %i\n", element);
-        else
-            printf("pop error, line is %i\n", __LINE__);
-        error = fifo_pop(&fifo, &element);
-        if (!error)
-            printf("element from FIFO: %i\n", element);
-        else
-            printf("pop error, line is %i\n", __LINE__);
-        fifo_print(&fifo);
+        PUSH(element)
+        POP
+        PRINT
     }
     printf("================ Third test ================\n");
     fifo_finalize(&fifo);
